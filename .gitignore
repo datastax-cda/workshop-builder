@@ -9,3 +9,4 @@ manifest.yml
 public/
 release
 go.sum
+workshop-builder
