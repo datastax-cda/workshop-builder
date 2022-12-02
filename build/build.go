@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"strings"
 
-	"../util"
+	"workshop-builder/util"
 	"github.com/gohugoio/hugo/commands"
 )
 

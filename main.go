@@ -1,11 +1,11 @@
 package main
 
 import (
-	"build"
-	"clean"
-	"initialize"
-	"serve"
-	"version"
+	"workshop-builder/build"
+	"workshop-builder/clean"
+	"workshop-builder/initialize"
+	"workshop-builder/serve"
+	"workshop-builder/version"
 
 	"github.com/spf13/cobra"
 )
