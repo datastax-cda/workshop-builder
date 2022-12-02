@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/datastax-cda/workshop-builder/util"
+	"../util"
 )
 
 func InitCmd() {

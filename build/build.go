@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/datastax-cda/workshop-builder//util"
+	"../util"
 	"github.com/gohugoio/hugo/commands"
 )
 

@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/datastax-cda/workshop-builder//serve"
-	"github.com/datastax-cda/workshop-builder/build"
-	"github.com/datastax-cda/workshop-builder/clean"
-	"github.com/datastax-cda/workshop-builder/initialize"
-	"github.com/datastax-cda/workshop-builder/version"
+	"build"
+	"clean"
+	"initialize"
+	"serve"
+	"version"
+
 	"github.com/spf13/cobra"
 )
 
