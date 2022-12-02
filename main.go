@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/mborges-pivotal/pace-workshop-base/build"
-	"github.com/mborges-pivotal/pace-workshop-base/clean"
-	"github.com/mborges-pivotal/pace-workshop-base/initialize"
-	"github.com/mborges-pivotal/pace-workshop-base/serve"
-	"github.com/mborges-pivotal/pace-workshop-base/version"
+	"github.com/datastax-cda/workshop-builder//serve"
+	"github.com/datastax-cda/workshop-builder/build"
+	"github.com/datastax-cda/workshop-builder/clean"
+	"github.com/datastax-cda/workshop-builder/initialize"
+	"github.com/datastax-cda/workshop-builder/version"
 	"github.com/spf13/cobra"
 )
 

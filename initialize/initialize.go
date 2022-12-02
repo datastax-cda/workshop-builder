@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Pivotal-Field-Engineering/pace-builder/util"
+	"github.com/datastax-cda/workshop-builder/util"
 )
 
 func InitCmd() {

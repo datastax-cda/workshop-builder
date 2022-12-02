@@ -6,6 +6,6 @@ import (
 
 func VersionCmd() {
 
-	fmt.Println("pace-builder v1.5")
+	fmt.Println("workshopt-builder v0.1")
 
 }

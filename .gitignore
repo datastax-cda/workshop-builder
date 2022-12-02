@@ -1,8 +1,8 @@
 workshopGen
 .idea
-pace-darwin
-pace-linux
-pace-windows.exe
+workshop-darwin
+workshop-linux
+workshop-windows.exe
 config.json
 .DS_Store
 manifest.yml
