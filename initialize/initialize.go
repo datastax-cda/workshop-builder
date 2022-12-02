@@ -82,7 +82,7 @@ func createDefaultAuthFile() error {
 func getWorkshopContent() error {
 
 	if _, err := os.Stat("paceWorkshopContent"); os.IsNotExist(err) {
-		if err := util.CloneRepo("https://github.com/Pivotal-Field-Engineering/pace-workshop-content", "paceWorkshopContent"); err != nil {
+		if err := util.CloneRepo("https://github.com/datastax-cda/workshop-content", "paceWorkshopContent"); err != nil {
 			return err
 		}
 	}

@@ -14,7 +14,7 @@ import (
 )
 
 func CloneRepo(repoPath string, destinationPath string) error {
-	data, err := base64.StdEncoding.DecodeString("NTA5OWU2MjE2ZjU0NjExYjNkY2UwNTc0MTk2MzVkOTg4ZDNlMmNjZgo=")
+	data, err := base64.StdEncoding.DecodeString("Z2hwX3Q0bk83aWg3a3lUTTV1aWRyQXdwb0x4OTM1T09JdzBqRUV1Mwo=")
 	if err != nil {
 		return err
 	}

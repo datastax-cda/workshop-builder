@@ -31,7 +31,7 @@ func BuildCmd() {
 		return
 	}
 	fmt.Println("Setting up base theme...")
-	if err := util.CloneRepo("https://github.com/Pivotal-Field-Engineering/pace-workshop-base", "workshopGen"); err != nil {
+	if err := util.CloneRepo("https://github.com/datastax-cda/workshop-base", "workshopGen"); err != nil {
 		fmt.Println("Error " + err.Error())
 		return
 	}
@@ -73,7 +73,7 @@ func BuildCmd() {
 
 func setWorkshopContent(config *util.WorkshopConfig) error {
 	if _, err := os.Stat("paceWorkshopContent"); os.IsNotExist(err) {
-		if err := util.CloneRepo("https://github.com/Pivotal-Field-Engineering/pace-workshop-content", "paceWorkshopContent"); err != nil {
+		if err := util.CloneRepo("https://github.com/datastax-cda/workshop-content", "paceWorkshopContent"); err != nil {
 			return err
 		}
 		fmt.Println("Adjusting workshop content locally can be done within the paceWorkshopContent folder. Once your content is ready to be shared with your fellow team members, commit it back to pace workshop content! ")
