@@ -10,3 +10,7 @@ public/
 release
 go.sum
 workshop-builder
+.vscode/
+Staticfile.auth
+paceWorkshopContent/
+publicGen/

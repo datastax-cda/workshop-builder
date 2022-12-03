@@ -12,7 +12,9 @@ import (
 	"strings"
 
 	"workshop-builder/util"
+
 	"github.com/gohugoio/hugo/commands"
+	cp "github.com/otiai10/copy"
 )
 
 var languages = [...]string{"en", "es", "fr", "pt"}
@@ -198,6 +200,9 @@ func setWorkshopExtras(curContent util.ContentConfig, contType string) error {
 					return err
 				}
 			}
+		} else {
+			err := cp.Copy(srcfp, dstfp)
+			fmt.Println(err)
 		}
 	}
 
