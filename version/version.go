@@ -6,6 +6,6 @@ import (
 
 func VersionCmd() {
 
-	fmt.Println("workshopt-builder v0.1")
+	fmt.Println("workshopt-builder dscda v0.1")
 
 }
