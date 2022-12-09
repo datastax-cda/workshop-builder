@@ -20,6 +20,15 @@
             "filename":"example/example-demo"
             }
         ]
+    },
+    {
+        "type": "labs",
+        "content": [
+            {
+            "name":"example-demo",
+            "filename":"example/example-demo"
+            }
+        ]
     }
   ]
 }

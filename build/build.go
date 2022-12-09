@@ -1,3 +1,4 @@
+// Utility responsible for building the HUGO site
 package build
 
 import (
@@ -27,26 +28,32 @@ func BuildCmd() {
 		return
 	}
 
-	fmt.Println("Cleaning up existing workshopGen...")
-	if err := os.RemoveAll("workshopGen/"); err != nil {
-		fmt.Println("Error " + err.Error())
-		return
-	}
+	// MMB: TODO: clean up flag to delete workshopGen?
+	// fmt.Println("Cleaning up existing workshopGen...")
+	// if err := os.RemoveAll("workshopGen/"); err != nil {
+	// 	fmt.Println("Error " + err.Error())
+	// 	return
+	// }
+
+	// MMB: TODO: clean up flag to delete workshopGen?
 	fmt.Println("Setting up base theme...")
-	if err := util.CloneRepo("https://github.com/datastax-cda/workshop-base", "workshopGen"); err != nil {
-		fmt.Println("Error " + err.Error())
-		return
-	}
-	if err := util.RemoveGitMetadata("workshopGen"); err != nil {
-		fmt.Println("Error " + err.Error())
-		return
+	if _, err := os.Stat("workshopGen"); os.IsNotExist(err) {
+		if err := util.CloneRepo("https://github.com/datastax-cda/workshop-base", "workshopGen"); err != nil {
+			fmt.Println("Error " + err.Error())
+			return
+		}
+		if err := util.RemoveGitMetadata("workshopGen"); err != nil {
+			fmt.Println("Error " + err.Error())
+			return
+		}
+	} else {
+		fmt.Println("Using existing workshopGen folder..")
 	}
 
 	if err := setWorkshopTitle(config); err != nil {
 		fmt.Println("Error " + err.Error())
 		return
 	}
-
 	if err := setWorkshopContent(config); err != nil {
 		fmt.Println("Error " + err.Error())
 		return
@@ -65,14 +72,9 @@ func BuildCmd() {
 		os.Exit(-1)
 	}
 
-	fmt.Println("Copying Staticfile.auth to /publicGen ...")
-	if err := copyStaticfileAuth(); err != nil {
-		fmt.Println("Error " + err.Error())
-		return
-	}
-
 }
 
+// Workshop Content
 func setWorkshopContent(config *util.WorkshopConfig) error {
 	if _, err := os.Stat("paceWorkshopContent"); os.IsNotExist(err) {
 		if err := util.CloneRepo("https://github.com/datastax-cda/workshop-content", "paceWorkshopContent"); err != nil {
@@ -82,30 +84,21 @@ func setWorkshopContent(config *util.WorkshopConfig) error {
 	}
 
 	for _, module := range config.Modules {
-		if (strings.Compare(module.Type, "concepts")) == 0 {
-			if err := setWorkshopConcepts(module.Content); err != nil {
-				return err
-			}
-		} else if module.Type == "demos" {
-			if err := setWorkshopDemos(module.Content); err != nil {
-				return err
-			}
-		} else {
-			return fmt.Errorf("config contains a module (%s) that is not of type demos or concepts. This is not allowed", module.Type)
+		if err := setWorkshopFolder(module.Content, module.Type); err != nil {
+			return err
 		}
 	}
 	return nil
 }
-
-func setWorkshopDemos(contents []util.ContentConfig) error {
+func setWorkshopFolder(contents []util.ContentConfig, name string) error {
 	for order, content := range contents {
-		err := setWorkshopExtras(content, "demos")
+		err := setWorkshopExtras(content, name)
 		if err != nil {
 			return err
 		}
 		for _, language := range languages {
 			fileName := strings.Split(content.Filename, "/")
-			pageFile := "workshopGen/content/demos/" + fileName[len(fileName)-1] + "." + language + ".md"
+			pageFile := "workshopGen/content/" + name + "/" + fileName[len(fileName)-1] + "." + language + ".md"
 			err := createPage(pageFile, content.Name, order)
 
 			if err != nil {
@@ -117,32 +110,6 @@ func setWorkshopDemos(contents []util.ContentConfig) error {
 			if err != nil {
 				fmt.Printf("cannot add specified demo markdown to file, %s, %+v", fileName[len(fileName)-1]+"."+language+".md", err)
 				return err
-			}
-		}
-	}
-	return nil
-}
-
-func setWorkshopConcepts(contents []util.ContentConfig) error {
-	for order, content := range contents {
-		err := setWorkshopExtras(content, "concepts")
-		if err != nil {
-			fmt.Println(err)
-			return err
-		}
-		for _, language := range languages {
-			fileName := strings.Split(content.Filename, "/")
-			pageFile := "workshopGen/content/concepts/" + fileName[len(fileName)-1] + "." + language + ".md"
-			err := createPage(pageFile, content.Name, order)
-
-			if err != nil {
-				return err
-			}
-
-			contentPath := "paceWorkshopContent/" + content.Filename
-			err = addMarkdown(pageFile, contentPath+"."+language+".md", language)
-			if err != nil {
-				fmt.Printf("cannot add specified content markdown to file, %s, %+v", fileName[len(fileName)-1]+"."+language+".md", err)
 			}
 		}
 	}
@@ -165,11 +132,14 @@ func setWorkshopExtras(curContent util.ContentConfig, contType string) error {
 	if contType == "demos" {
 		destination = "workshopGen/content/demos/" + contentPath[len(contentPath)-1] + "/"
 		_ = os.MkdirAll(destination, os.FileMode(0777))
+	} else if contType == "labs" {
+		destination = "workshopGen/content/labs/" + contentPath[len(contentPath)-1] + "/"
+		_ = os.MkdirAll(destination, os.FileMode(0777))
 	} else if contType == "concepts" {
 		destination = "workshopGen/content/concepts/" + contentPath[len(contentPath)-1] + "/"
 		_ = os.MkdirAll(destination, os.FileMode(0777))
 	} else {
-		return fmt.Errorf("%s content is not of demos or concepts types", contType)
+		return fmt.Errorf("%s content is not of demos, labs or concepts types", contType)
 	}
 
 	fds, err := ioutil.ReadDir(source)
@@ -247,24 +217,12 @@ func createPage(file string, title string, order int) error {
 	return nil
 }
 
-func copyStaticfileAuth() error {
-	destination, err := os.Create("./publicGen/Staticfile.auth")
-
-	defer destination.Close()
-	source, err := os.Open("./Staticfile.auth")
-	_, err = io.Copy(destination, source)
-	if err != nil {
-		return fmt.Errorf("cannot create Staticfile.auth", err)
-	}
-	return nil
-}
-
 func setWorkshopTitle(config *util.WorkshopConfig) error {
 	workshopTitle := fmt.Sprintf("%s Workshop", config.WorkshopSubject)
 	workshopToml := fmt.Sprintf("+++\ntitle = \"%s\"\nchapter = true\nweight = 1\n+++\n\n", workshopTitle)
 	workshopHomepageContent := workshopToml
 	if config.WorkshopHomepage != "" {
-		homepageContent, err := ioutil.ReadFile(config.WorkshopHomepage)
+		homepageContent, err := ioutil.ReadFile("paceWorkshopContent" + "/" + config.WorkshopHomepage)
 		if err != nil {
 			fmt.Printf("%s not found!\n", config.WorkshopHomepage)
 			return err

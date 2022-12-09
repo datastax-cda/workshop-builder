@@ -4,6 +4,12 @@ Bringing back to life the work created by [James Williams](https://www.linkedin.
 
 The purpose of this tool is to help create microsites used primarily to run customer workshops. 
 
+## What can you do with this tool?
+
+* Build custom workshop from a existing content modules
+* content modules are created as code in github repo
+* Use the microsites for internal training and knowledge sharing
+
 ## Quick Start
 
 1. Download the correct `dscda` CLI binary from the releases tab.
@@ -19,14 +25,13 @@ The purpose of this tool is to help create microsites used primarily to run cust
 
 1. Deploy the static microsite built with [HUGO](https://gohugo.io/hosting-and-deployment/) at your environment of choice.
 
-1. **Optional* Use our Netlify(https://app.netlify.com/teams/mborges-pivotal/overview) team to deploy. If you use this option, your workshop will be auto-deleted after 30 days.
+1. **Optional** Use our Netlify(https://app.netlify.com/teams/mborges-pivotal/overview) team to deploy. If you use this option, your workshop will be auto-deleted after 30 days.
 
+## Creating Content
 
-## Notes
+Content is pulled from the [workshop-content](https://github.com/datastax-cda/workshop-content) github repo. Feel free to add any content there that you can then use to build a workshop with `dscda build`. 
 
-1. Content is pulled from the [workshop-content](https://github.com/datastax-cda/workshop-content) github repo. Feel free to add any content there that you can then use to build a workshop with `dscda build`
-
-1. While `dscda` will build a generic homepage for your workshop you can setup a custom one by supplying a markdown file via the `workshopHomepage` field in the `config.json` file. This is not required.
+More details are available in the [workshop-content](https://github.com/datastax-cda/workshop-content) github repo.
 
 ## Build/Install workshop-builder manually
 1. Download and install [go](https://golang.org/dl/)
